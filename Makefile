@@ -6,7 +6,7 @@ LFLAGS = -lm
 
 # cuz i dont want to type every widget after
 WIDGETS = $(wildcard src/cli/*.c)
-SRCS = src/term.c src/buffers/buf.c src/dom/dom.c src/cli/widgets.c src/gen/gen.c $(WIDGETS)
+SRCS = src/term.c src/buffers/buf.c src/dom/dom.c src/dom/render.c src/cli/widgets.c src/gen/gen.c $(WIDGETS)
 OBJS = $(SRCS:src/%.c=build/%.o)
 LIB  = lib/libfrecli.a
 
