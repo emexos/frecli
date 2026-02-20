@@ -10,9 +10,9 @@ SRCS = src/term.c src/buffers/buf.c src/dom/dom.c src/cli/widgets.c src/gen/gen.
 OBJS = $(SRCS:src/%.c=build/%.o)
 LIB  = lib/libfrecli.a
 
-.PHONY: all clean install examples
+.PHONY: all clean install m
 
-all: $(LIB) examples
+all: $(LIB) m
 
 $(LIB): $(OBJS)
 	ar rcs $@ $^
@@ -34,4 +34,4 @@ m/muhehe: m/muhehe.c $(LIB)
 	$(CC) $(CFLAGS) $< -L./lib -lfrecli $(LFLAGS) -o $@
 
 clean:
-	rm -rf build $(LIB) examples/demo
+	rm -rf build $(LIB) m/muhehe
