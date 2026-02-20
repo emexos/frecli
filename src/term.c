@@ -26,8 +26,8 @@ int fc_term_init(void) {
     raw.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
     raw.c_cflag &= ~(CSIZE|PARENB);
     raw.c_cflag |= CS8;
-    raw.c_cc[VMIN]  = 0;
-    raw.c_cc[VTIME] = 1;
+    raw.c_cc[VMIN]  = 1;   // bad if u switch to 0
+    raw.c_cc[VTIME] = 0;
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) < 0) return -1;
     s_raw = 1;
     return 0;
