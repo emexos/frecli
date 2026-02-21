@@ -26,20 +26,19 @@ void fc_dom_resize(fc_dom_t *dom, int w, int h) {
     fc_dom_force(dom);
 }
 
-fc_node_t *fc_node_new(fc_dom_t *dom, fc_node_type_t type,int x, int y, int w, int h)
-{
+fc_node_t *fc_node_new(fc_dom_t *dom, fc_node_type_t type, int x, int y, int w, int h) {
     if (dom->nnodes >= FC_MAX_NODES) return NULL;
     fc_node_t *n = &dom->nodes[dom->nnodes++];
     memset(n, 0, sizeof(*n));
     n->type = type;
     n->x = x; n->y = y; n->w = w; n->h = h;
     n->dirty = true;
-    n->d.box.fg = FC_DEFAULT;
-    n->d.box.bg = FC_DEFAULT;
+    n->d.box.fg       = FC_DEFAULT;
+    n->d.box.bg       = FC_DEFAULT;
     n->d.box.title_fg = FC_DEFAULT;
-    n->d.box.border = FC_BORDER_SINGLE;
-    n->d.text.fg = FC_DEFAULT;
-    n->d.text.bg = FC_DEFAULT;
+    n->d.box.border   = FC_BORDER_SINGLE;
+    n->d.text.fg      = FC_DEFAULT;
+    n->d.text.bg      = FC_DEFAULT;
     return n;
 }
 
@@ -71,4 +70,35 @@ void fc_dom_force(fc_dom_t *dom) {
     for (int i = 0; i < dom->nnodes; i++) dom->nodes[i].dirty = true;
     fc_buf_force(dom->buf);
     fc_dom_render(dom);
+}
+
+static bool click_node(fc_node_t *n, int x, int y) {
+    for (int i = n->nkids - 1; i >= 0; i--)
+        if (click_node(n->kids[i], x, y)) return true;
+    if (n->type != FC_NODE_BUTTON) return false;
+    if (x < n->x || x >= n->x + n->w) return false;
+    if (y != n->y) return false;
+    if (n->d.button.on_click) n->d.button.on_click(n);
+    return true;
+}
+
+bool fc_dom_click(fc_dom_t *dom, int x, int y) {
+    for (int i = dom->nnodes - 1; i >= 0; i--)
+        if (!dom->nodes[i].parent)
+            if (click_node(&dom->nodes[i], x, y)) return true;
+    return false;
+}
+
+static void hover_node(fc_node_t *n, int x, int y) {
+    for (int i = 0; i < n->nkids; i++) hover_node(n->kids[i], x, y);
+    if (n->type != FC_NODE_BUTTON) return;
+    bool was = n->d.button.hovered;
+    n->d.button.hovered = (y == n->y && x >= n->x && x < n->x + n->w);
+    if (n->d.button.hovered != was) fc_node_dirty(n);
+}
+
+void fc_dom_hover(fc_dom_t *dom, int x, int y) {
+    for (int i = 0; i < dom->nnodes; i++)
+        if (!dom->nodes[i].parent)
+            hover_node(&dom->nodes[i], x, y);
 }

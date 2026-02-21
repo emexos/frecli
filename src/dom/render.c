@@ -53,6 +53,16 @@ void render_node(fc_node_t *n, fc_buf_t *buf)
                 }
                 break;
             }
+            case FC_NODE_BUTTON: {
+                fc_color_t fg = n->d.button.hovered ? n->d.button.hover_fg : n->d.button.fg;
+                fc_color_t bg = n->d.button.hovered ? n->d.button.hover_bg : n->d.button.bg;
+                fc_rect_t r = {n->x, n->y, n->w, 1};
+                fc_buf_fill(buf, r, fc_mkcell(' ', fg, bg));
+                int lw = (int)strlen(n->d.button.label);
+                int tx = n->x + (n->w - lw) / 2;
+                fc_buf_text(buf, tx, n->y, n->d.button.label, fg, bg);
+                break;
+            }
         }
         n->dirty = false;
     }

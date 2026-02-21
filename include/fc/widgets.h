@@ -19,3 +19,14 @@ void fc_progress_colors(fc_node_t *n, fc_color_t on, fc_color_t off);
 void fc_progress_pct(fc_node_t *n, bool show);
 
 void fc_draw_box(fc_buf_t *buf, int x, int y, int w, int h, const char *title, fc_align_t talign,fc_border_t border, fc_color_t fg, fc_color_t bg, fc_color_t title_fg);
+
+
+fc_node_t *fc_button(fc_dom_t *dom, int x, int y, int w, const char *label);
+void fc_button_colors(fc_node_t *n, fc_color_t fg, fc_color_t bg);
+void fc_button_hover_colors(fc_node_t *n, fc_color_t fg, fc_color_t bg);
+void fc_button_on_click(fc_node_t *n, void(*cb)(fc_node_t *n));
+void fc_button_set_userdata(fc_node_t *n, void *data);
+void *fc_button_get_userdata(fc_node_t *n);
+void fc_button_set_label(fc_node_t *n, const char *label);
+
+bool fc_dom_click(fc_dom_t *dom, int x, int y);

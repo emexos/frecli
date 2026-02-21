@@ -7,6 +7,7 @@ typedef enum {
     FC_NODE_BOX = 0,
     FC_NODE_TEXT,
     FC_NODE_PROGRESS,
+    FC_NODE_BUTTON,
 } fc_node_type_t;
 
 typedef struct fc_node fc_node_t;
@@ -37,11 +38,19 @@ struct fc_node {
             fc_align_t align;
         } text;
         struct {
-            float  val;
+            float val;
             fc_color_t on_fg;
             fc_color_t off_fg;
             bool show_pct;
         } progress;
+        struct {
+            char label[FC_STR];
+            fc_color_t fg, bg;
+            fc_color_t hover_fg, hover_bg;
+            bool hovered;
+            void (*on_click)(fc_node_t *n);
+            void *userdata;
+        } button;
     } d;
 };
 
@@ -57,8 +66,10 @@ void fc_dom_free(fc_dom_t *dom);
 void fc_dom_render(fc_dom_t *dom);
 void fc_dom_force(fc_dom_t *dom);
 void fc_dom_resize(fc_dom_t *dom, int w, int h);
+bool fc_dom_click(fc_dom_t *dom, int x, int y);
+void fc_dom_hover(fc_dom_t *dom, int x, int y);
 
-fc_node_t *fc_node_new(fc_dom_t *dom, fc_node_type_t type,int x, int y, int w, int h);
+fc_node_t *fc_node_new(fc_dom_t *dom, fc_node_type_t type, int x, int y, int w, int h);
 void fc_node_attach(fc_node_t *parent, fc_node_t *child);
 void fc_node_dirty(fc_node_t *n);
 void fc_node_move(fc_node_t *n, int x, int y);

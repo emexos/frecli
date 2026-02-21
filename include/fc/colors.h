@@ -10,6 +10,7 @@
 // truecolor
 #define FC_RGB(r,g,b) (0x02000000u | ((uint32_t)(r)<<16) | ((uint32_t)(g)<<8) | (uint32_t)(b))
 
+#define FC_BLACK       FC_C256(0)
 #define FC_RED         FC_C256(1)
 #define FC_GREEN       FC_C256(2)
 #define FC_YELLOW      FC_C256(3)

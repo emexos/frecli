@@ -5,6 +5,7 @@
 #include "dom.h"
 #include "widgets.h"
 #include "colors.h"
+#include "input.h"
 
 //#include <stdio.h>
 //#include <stdlib.h>
